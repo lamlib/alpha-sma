@@ -1,0 +1,162 @@
+Bộ icon Material Design Icon.
+
+Bước 1. Tạo folder project từ template init của Next.js
+npx create-next-app@latest
+
+Sau đó tạo thư mục admin, parent, student, teacher 
+gói nó vào (dashboard)
+
+trong thư mục (dashboard) tạo layer 
+
+Reponsive taiwind css theo hướng mobile first.
+
+Breakpoint prefix	Minimum width	CSS
+sm	640px	@media (min-width: 640px) { ... }
+md	768px	@media (min-width: 768px) { ... }
+lg	1024px	@media (min-width: 1024px) { ... }
+xl	1280px	@media (min-width: 1280px) { ... }
+2xl	1536px	@media (min-width: 1536px) { ... }
+
+=>
+- màn hình sm  left(14%) và right (86%)
+- màn hình md  left(8%) và right (92%) 
+- màn hình lg  left(16%) và right (84%) 
+- màn hình xl  left(14%) và right (86%) 
+- màn hình 2xl left(14%) và right (86%) 
+
+Sidebar trên cùng có một ảnh logo, mặc định chỉ có logo, ở màn hình lg(1024px) trở lên thì hiển thị 
+tên ứng dụng, tên cụm, tên tag.
+
+Đối với các phần tử trên thì khi màn nhỏ hơn lg thì display flex, center. Khi màn hình lớn thì start.
+
+
+Menu: 
+	- Căn lề trên 1rem cỡ chữ sm 
+	- Gồm các cụm;
+
+		Các cụm:
+		- Bên trong chứa item và title của cụm
+		- Các item (bao gồm cả title của cụm) sắp xếp từ trên xuống.
+		- Cách nhau 8px.
+
+			Tiêu đề các cụm: 
+			- Căn lề trên dưới 1rem. 
+			- Chữ màu gray-400. 
+			- Ẩn mặc định, 
+			- Khi màn hình lớn hơn 1080px thì hiển thị.
+
+			Item:
+			- Có khối bọc ngoài(dùng thẻ Link)
+			- Chứa icon img và title của item.
+			- Icon và title của item nằm trên một đường thẳng nằm ngang căn chính giữa item.
+			- Khoảng các giữa icon và title của item là 16px.
+			- Padding trên dưới đều là 8px.
+
+				Icon của item:
+					- Kích thước 20 x 20 pixel.
+
+				Title của item:
+					- Ẩn mặc định.
+					- Khi màn hình lớn hơn 1080px thì hiển thị.
+
+Main content: 
+ - Gồm navbar và page con.
+  Navbar: 
+  - Gồm phần tử search bên trái và phần tử [icon, notification, account] bên phải.
+  - Hiện thị kiểu flex, căn giữa chiều dọc, khoảng trắng giữa chiều ngang, padding 4 hướng 1rem.
+
+    Phần tử search: 
+	  - Mặc định ẩn, 
+	  - Hiển thị kiểu flex trên màn hình 768px-md trở lên, 
+	  - Gồm icon và input nằm theo chiều dọc.
+	  - Căn giữa chiều dọc, 
+	  - Khoảng rộng giữa các item con là 8px. 
+	  - Cỡ chữ 12px border 1.5px màu gray 300px.
+	  - Padding chiều ngang 8px.
+
+	  Phần tử icon:
+	    Chiều rộng và chiều cao 14px
+
+	  Phần tử input:
+	    Độ rộng 200px.
+		Padding 4 hướng 8px, 
+		Màu nền trong suốt, 
+		Khi focus vào không có outline.
+
+
+	Phần tử [message, notification, account]:
+	  - Luôn luôn hiển thị
+	  - Các item con nằm theo chiều ngang, 
+	  - Căn các phần tử nằm giữa theo chiều dọc.
+	  - Căn về cuối đối với chiều ngang (Khi phần tử search ẩn, do chỉ còn 1 phần tử trong flex, nó bị căn về đâu, do đó cần cho độ rộng của phần tử này là full và căn cuối).
+	  - Độ rộng full (chiếm nhiều chỗ nhất có thể).
+	  - Độ rộng giữa các phần tử là 24px.
+
+	    Phần tử message:
+		  - Màu nền trắng.
+		  - Tròn. 
+		  - Kích thước 28x28 pixel.
+		  - Căn icon ở chính giữa
+		  - Con trỏ poiter.
+
+		  Phần tử Icon phù hợp (kích thước 20 x 20)
+
+
+		Phần tử notification:
+		  - Màu nền trắng.
+		  - Tròn. 
+		  - Kích thước 28x28 pixel.
+		  - Căn icon ở chính giữa
+		  - Con trỏ poiter.
+		  - Là chốt vị trí tuyệt đối cho badge.
+
+		  Phần tử Icon phù hợp (kích thước 20 x 20)
+		  Badge:
+		    - Vị trí tương đối với phần tử cha. 
+			- Kích thước 20 x 20 pixel.
+			- Màu red-600. 
+			- Thụt về trên 12px. 
+			- Thụt sang phải 12px.
+			- Chữ màu trắng cỡ 12px.
+			- Căn chữ tại trung tâm của badge.
+			- Tròn.
+		
+		Phần tử Username
+			Bao gồm tên và role theo chiều từ trên xuống.
+			Tên cỡ 12px lineheith 12px.
+			Role cỡ 10px gray-500 căn phải.
+
+
+		Phần tử account.
+			Tròn.
+			Kích thước 36 x 36.
+
+  Page con:
+
+  	=============================
+	Admin page: 
+	 - Padding 16px, màn hình bé thì là flex column ,với màn hình 768px trở lên thì 
+	 flex row (hai bên)
+	 - Với bên trái thì gồm các thẻ userCard  bên trái màn hình trên 1024px chiếm 2/3 pixel 
+	 - Bên trái chứa các thẻ độ rộng 1 rem các đều nhau, và flex wrap.
+
+	 Thẻ userCard:
+	 	Có thuộc tính là type.
+		Border 1 rem lẻ là đỏ, chẵn là đen.
+		Dòng đầu của thẻ bên trái là ngày bên phải là dấu 3 chấm.
+		Dòng dưới là số lượng của thẻ. 
+		Dòng cuối cùng hiện thị type của thẻ.
+	
+		Sau đó cài đặt thư viện rechart.
+			npm install recharts
+
+	  
+
+
+
+ 
+
+
+
+
+
