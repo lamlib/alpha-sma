@@ -1,0 +1,214 @@
+#The perfect commit.
+1. Add the <right> changes!
+2. Compose a <good> commit message!
+
+Xấu: gói mọi thứ vào một commit.
+Tốt: chia các thứ theo chủ đề.
+
+Bạn có thể chia một file ra các commit khác nhau bằng việc sử dụng lệnh git add -p <file>
+
+Một thông điệp commit hoàn hảo. 
+1. Subject = consise summary of what happended
+2. Body = more detailed explanation
+    - What is now different than before?
+    - What's the reason for the change?
+    - Is there anything to watch out for / anything particularly remarkable?
+
+Gõ lệnh git commit.
+
+Sau đó vào chế độ terminal editor (VIM). Sau khi gõ xong nội dung thì :w để lưu và :q để thoát khỏi chế độ VIM.
+
+
+Để xem sự thay đổi của file, hãy gõ git diff <đường dẫn tới file>.
+--- a/<đường dẫn tới file cũ>
+--- b/<đường dẫn tới file mới>
+
+@@ <line bắt đầu của sự khác biệt, số line trước khi có sự khác biệt> <line bắt đầu sau sự khác biệt, số line sau khi có sự khác biệt>
+
+Nếu bạn muốn hủy việc tạo commit bạn cần gõ :q! nó sẽ thoát mà không lưu.
+
+Nếu bạn không muốn VIM xuất hiện khi thực hiện commit sử dụng git commit -m "Nội dung commit của bạn."
+
+
+###########################
+CHIẾN LƯỢC TỔ CHỨC NHÁNH GIT - BRANCHING STRATEGIES
+
+Quy ước bằng văn bản - A Written Convention.
+
+Có sự động ý về quy trình phân nhánh của team bạn đang làm việc.
+
+1. Git cho phép bạn tạo nhánh - branch, nhưng nó không nói cách sử dụng chúng hiệu quả.
+2. Bạn cần một phương pháp hay nhất bằng văn bản về mọi thứ tổ chức trong team của bạn để tránh sai lầm và xung đột.
+3. Nó phụ thuộc nhiều vào nhóm của bạn, quy mô nhóm, dự án, và cách bạn xử lý các bản phát hành - release.
+4. Hỗ trợ các thành viên mới trong nhóm làm quen với các công cụ, quy trình làm việc và các tiêu chuẩn của nhóm.
+
+====================================================
+GIT stash.
+
+Tạo một nhánh từ stash.
+Khi bạn stash công việc lại, để đó, tiếp tục vẫn làm trên nhánh đó, bạn có thể gặp vấn đề khi apply những gì bạn 
+đã stash lại. Ví dụ như một trong số các file mà bạn đã stash bị chỉnh sửa không còn như ban đầu, việc apply sẽ gây ra conflict và bạn phải giải quyết nó.
+Nếu bạn không muốn giải quyết vấn đề này, có cách đơn gian hơn để kiểm tra xem stash của bạn có bị conflict hay không. 
+Bạn có thể chạy lệnh. 
+  git stash branch <new branchname>
+Lệnh này sẽ tạo một nhánh mới, checkout lại commit trước đó gần nhất trước khi bạn stash và apply nó ngay lập tức. Nếu thành công thì sẽ drop stash ra khỏi stack.
+Đây là một cách nhanh chóng để khôi phục task cũ đã stash và làm việc với nó trong một nhánh mới.
+ 
+=> Câu hỏi, branch đang đứng có bị thay đổi hay không ?
+=> Commit cuối cùng gần nhất trước stash là gì ?
+=> Điều gì xảy ra khi stash xong rồi làm chưa stash mà thực hiện stash, chưa stash nhưng tạo nhánh mới từ stash đã lưu.
+
+
+Dọn dẹp thư mục làm việc.
+
+    -   Đơn giản là loại bỏ chúng.
+
+    Chạy lệnh:
+
+    git clean
+
+    Lý do phổ biến: 
+        - Loại bỏ các tệp dư thừa được tạo bởi các merge hoặc công cụ bên ngoài, hoặc loại bỏ các bản build nặng nề, thực hiện lại một build sạch.
+    Chú ý: 
+        - Nó sẽ không xóa các file trong .gitignore
+        - Cần thận với lệnh này vì nó được thiết kế để loại bỏ các tệp untrack. Chạy lệnh xong là chim cút luôn đó :)
+        - Thông thường để an toàn thì chúng ta thực hiện lệnh git stash --all để stash tất cả (tracked, untracked, ignore files.)
+    
+    Nếu chỉ muốn xóa bỏ những tệp untracked thì chúng ta có thể sử dụng lệnh git clean -d.
+    - Chúng ta có thể thêm cờ cờ -f có nghĩa là force (sẽ không cần nó nếu clean.requireForce)
+        git clean -f -d 
+
+    - Nếu bạn muốn xem thử nếu chạy lệnh thì nó sẽ làm gì bạn có thể sử dụng cờ --dry-run hoặc cú pháp viết tắt là -n
+        git clean -d -n
+    
+
+=> Tôi đã hiểu việc các tệp dư thừa tạo bởi các công cụ bên ngoài, các build nặng nề, thực hiện lại build sạch, nhưng còn merge mà cũng tạo ra các tệp dư thừa á, chẳng phải nó đã ở trong commit rồi sao?
+=> Nó thiết kế để loại bỏ các tệp untracked vậy nó có loại bỏ các modifies không, và thêm cờ d thì nó chỉ xóa các untracked thôi à?
+=> Cờ -n áp dụng cho các lệnh khác oke chứ.
+
+Ví dụ áp dụng:
+Tạo folder có tên tmp.
+Tạo các file có tên file-a.txt, file-b.txt, file-c.txt.
+
+Chạy lệnh khởi tạo git.
+  git init
+
+Kiểm tra trạng thái thư mục.
+ git status
+
+*Nhận thấy 3 file chưa được tracking, (được coi là các file untracked)
+
+  - Thử sử dụng lệnh: git clean *Có một cảnh báo nguy hiểm rằng lệnh này cần sử dụng cờ f, từ chối xóa. fatal: clean.requireForce is true and -f not given: refusing to clean.
+    + Nó không thực hiện thành công. 
+  - Hãy thử git clean -f. 
+    + Nó sẽ chạy ngọt và mượt luôn, hí hí. *Bạn sẽ thấy nó thông báo nhiều dòng "Removing <tên file>" tùy theo số file bạn xóa, ngầu lòi luôn á :).
+  - Tạo lại các file và thử nghiệm set clean.requireForce bằng false
+    + Chạy lệnh: git config --global clean.requireForce false.
+    + Xem lại bạn đã config đúng chưa bằng việc chạy lệnh: git config --global clean.requireForce.
+    + Chạy lại lệnh: git clean. *Xóa mà không cần cờ, ngầu lòi :).
+    + Chạy lại lệnh: git config --global clean.requireForce true. *Chúng ta không nghịch ngu, hãy để mọi thứ như ban đầu.
+  - Để kiểm chứng lưu ý về git sẽ không xóa các file có trong .gitignore
+    + Tạo 2 file file-a.txt và file-b.txt.
+    + Tạo .gitignore 
+    + Thêm dòng chữ "file-a.txt" vào .gitignore.
+    + Add file .gitignore bằng cách chạy lệnh git add .gitignore
+    + Chạy lệnh: git clean -f
+      => Chỉ xóa file-b.txt
+    + Unstage .gitignore bằng lệnh git rm --cached .gitignore.
+    + Thử chạy lệnh: git clean -f
+      => GIT sẽ xóa file .gitignore đi nhưng file-a.txt sẽ vẫn còn nhưng chuyền từ ignore sang unstracked.
+
+      => Như vậy git clean -f chỉ xóa các file unstracked, các file ở trạng thái ignore sẽ không bị ảnh hưởng.
+
+    + Thử add file-a.txt để nó chuyển sang khu vực stage rồi xóa xem thế nào.
+      => file-a.txt không bị ảnh hưởng, do đó git clean -f không có tác dụng với khu vực git stage.
+    
+    Vậy để xóa một file ra khỏi working directory thì phải làm thế nào.
+
+
+    Nếu nó ở trạng thái committed hoặc stage thì có thể sử dụng lệnh git rm --cached để xóa nó ra khỏi Git, tức là cho nó sang trạng thái untracked.
+    Sau đó sử dụng lệnh git clean -f.
+
+
+    Mặc định bạn không thể chạy lệnh git clean khi cấu hình clean.requireForece không được set là false.
+
+    Do đó:
+    - Một là set cầu hình clean.requireForce về false (không khuyến khích), sau đó chạy lệnh git clean như bình thường.
+    - Hai là sử dụng cờ -f (force) giải thích bên dưới.
+
+    Thông thường sẽ sử dụng cờ -f, nhưng để cho đơn giản chúng ta sẽ set config về clean.requireForce.
+
+    Mặc định git clean sẽ chỉ xóa các file untracked. KHÔNG xóa các file tracked (Bao gồm các "new file" hay "modified" ở unstage hay stage), các thư mục untracked.
+
+    Khi thêm cờ -f (force) nó sẽ xóa dù cho bạn có set config của clean.requireForce là true hay false.
+    Khi thêm cờ -d (directory) nó sẽ xóa thêm cả các thư mục ở trạng thái untracked.
+    Khi thêm cờ -n nó sẽ ngăn việc xóa mà preview cho bạn xem những gì sẽ được xóa.
+    Khi thêm cờ -i (interactive) chuyển sang chế độ INTERACTIVE
+    Khi thêm cờ -q (quiet) việc xóa sẽ xảy ra trong im lặng.
+    Khi thêm cờ -e <pattern> hoặc --exclude=<pattern> sẽ xóa các thứ khác ngoài patttern. Ví dụ git clean -f -d -e file-a.txt hoặc là git clean -f -d --exclude=file-a.txt hoặc git clean -f -d  -e "*.log"  (mẫu wildcard)
+    Khi thêm cờ -x <eXcute standard ignore rules> sẽ hủy bỏ mọi tác động do .gitignore từ đó, các file cầu hình trong gitignore sẽ bị xóa.
+    Khi thêm cờ -X thì chỉ xóa các file cấu hình trong .gitignore.
+
+
+
+    
+================================================
+Đánh dấu chủ quyền của bạn. - Signing Your Work.
+
+
+- Bạn sẽ cần dùng công cụ gpg - Gnu Privacy Guard
+- Mở git bash lên. 
+- Gõ lệnh gpg --list-keys (Thông thường sẽ chưa khởi tạo và nó sẽ render ra các file cần thiết trên hệ thống và lúc này danh sách trông)
+- Cơ chế của việc này là tạo ra một cặp key là private và public, private key để bạn generate ra mã, public key cho người khác xác nhận mã bạn generate ra.
+
+Nếu bạn chưa có key, tạo key 
+gpg --gen-key
+
+Nếu tạo sai hãy xóa bằng lệnh 
+
+Trên hệ thống:
+gpg --delete-secret-keys <key-id>   # Xóa khóa riêng
+gpg --delete-keys <key-id>           # Xóa khóa công khai
+
+Ví dụ: 
+$ gpg --list-keys
+/Users/schacon/.gnupg/pubring.gpg
+---------------------------------
+pub   2048R/0A46826A 2014-06-04
+uid                  Scott Chacon (Git signing key) <schacon@gmail.com>
+sub   2048R/874529A9 2014-06-04
+
+$ git config --global user.signingkey 0A46826A!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=================================================
+Xem cầu hình git bằng lệnh 
+
+Tất cả cầu hình được áp dụng trên toàn hệ thống.
+  git config --global --list
+Tất cả cầu hình áp dụng tại thư mục nhất định.
+  git config --list
+Kiêm tra một cầu hình cụ thể thì chỉ cần thay --list bằng cấu hình bạn muốn kiểm tra (ví dụ: user.email, user.name)
+
+
+
+
+
+
+
+
+
+
